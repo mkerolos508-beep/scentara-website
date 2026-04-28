@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scentara | عالم العطور الفاخرة</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div class="logo">SCENTARA</div>
+        <nav>
+            <a href="#products">مجموعتنا</a>
+            <div class="cart-btn" onclick="toggleCart()">
+                <span>السلة</span>
+                <span id="cart-count">0</span>
+            </div>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>أناقة العطر تكتمل بك</h1>
+        <p>اكتشف تشكيلتنا الحصرية من الزيوت العطرية النادرة</p>
+        <a href="#products" class="btn-gold">تسوق الآن</a>
+    </section>
+
+    <section id="products" class="products-section">
+        <h2 class="section-title">العطور الأكثر مبيعاً</h2>
+        <div class="product-grid">
+            <div class="product-card">
+                <div class="badge">الأكثر طلباً</div>
+                <div class="product-img">✨</div> 
+                <h3>Midnight Oud</h3>
+                <p class="price">150 SAR</p>
+                <button class="add-to-cart" onclick="addToCart('Midnight Oud', 150)">إضافة للسلة</button>
+            </div>
+            <div class="product-card">
+                <div class="product-img">🌹</div>
+                <h3>Royal Rose</h3>
+                <p class="price">120 SAR</p>
+                <button class="add-to-cart" onclick="addToCart('Royal Rose', 120)">إضافة للسلة</button>
+            </div>
+            <div class="product-card">
+                <div class="product-img">🍊</div>
+                <h3>Citrus Gold</h3>
+                <p class="price">135 SAR</p>
+                <button class="add-to-cart" onclick="addToCart('Citrus Gold', 135)">إضافة للسلة</button>
+            </div>
+        </div>
+    </section>
+
+    <div id="cart-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="toggleCart()">&times;</span>
+            <h2>حقيبة تسوق Scentara</h2>
+            <div id="cart-items-list">
+                </div>
+            <div class="total-area">
+                <p>الإجمالي: <span id="total-price">0</span> SAR</p>
+                <button class="checkout-btn" onclick="sendToWhatsApp()">إتمام الطلب عبر واتساب</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Scentara Perfumes. الجودة والتميز.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
