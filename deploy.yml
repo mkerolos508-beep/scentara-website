@@ -1,0 +1,36 @@
+name: Deploy Scentara Site
+
+on:
+  push:
+    branches:
+      - main  # هيشتغل تلقائياً لما ترفع أي تعديل على فرع main
+
+# حل مشكلة Node.js 20 وإجبار الـ Action على استخدام الإصدار الجديد
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+# السماح للـ Workflow برفع الملفات لـ GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # هيرفع كل الملفات اللي في المجلد الرئيسي (index.html و style.css)
+          path: '.'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
