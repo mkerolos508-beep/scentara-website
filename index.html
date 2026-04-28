@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SCENTARA — Fine Fragrance</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Tenor+Sans&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #F5EFE4;
+      --sand: #D9C9AE;
+      --gold: #B49A6A;
+      --deep: #1A1410;
+      --warm: #8B6F47;
+      --smoke: #6B6259;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--cream);
+      color: var(--deep);
+      font-family: 'Tenor Sans', sans-serif;
+      cursor: none;
+      overflow-x: hidden;
+    }
+
+    /* Custom cursor */
+    .cursor {
+      position: fixed;
+      width: 10px; height: 10px;
+      background: var(--gold);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width .3s, height .3s, background .3s;
+      mix-blend-mode: multiply;
+    }
+    .cursor-ring {
+      position: fixed;
+      width: 36px; height: 36px;
+      border: 1px solid var(--gold);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: all .15s ease;
+      opacity: .6;
+    }
+    body:hover .cursor { opacity: 1; }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 2rem 4rem;
+      mix-blend-mode: multiply;
+    }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      letter-spacing: .35em;
+      color: var(--deep);
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 3rem; list-style: none; }
+    .nav-links a {
+      font-size: .72rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--smoke);
+      text-decoration: none;
+      transition: color .3s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-left {
+      display: flex; flex-direction: column;
+      justify-content: flex-end;
+      padding: 10rem 4rem 6rem;
+      position: relative;
+      z-index: 2;
+    }
+    .hero-eyebrow {
+      font-size: .68rem;
+      letter-spacing: .35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeUp .8s .2s forwards;
+    }
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(4rem, 7vw, 7.5rem);
+      font-weight: 300;
+      line-height: .95;
+      color: var(--deep);
+      opacity: 0;
+      animation: fadeUp .9s .4s forwards;
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--gold);
+    }
+    .hero-sub {
+      margin-top: 2.5rem;
+      font-size: .85rem;
+      letter-spacing: .08em;
+      line-height: 1.9;
+      color: var(--smoke);
+      max-width: 340px;
+      opacity: 0;
+      animation: fadeUp .9s .6s forwards;
+    }
+    .hero-cta {
+      margin-top: 3.5rem;
+      opacity: 0;
+      animation: fadeUp .9s .8s forwards;
+      display: flex; align-items: center; gap: 2rem;
+    }
+    .btn-primary {
+      display: inline-block;
+      padding: 1rem 2.8rem;
+      background: var(--deep);
+      color: var(--cream);
+      font-family: 'Tenor Sans', sans-serif;
+      font-size: .72rem;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: none;
+      cursor: none;
+      transition: background .3s, transform .3s;
+    }
+    .btn-primary:hover { background: var(--gold); transform: translateY(-2px); }
+    .btn-ghost {
+      font-size: .72rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--smoke);
+      text-decoration: none;
+      display: flex; align-items: center; gap: .8rem;
+      transition: color .3s;
+    }
+    .btn-ghost::after {
+      content: '';
+      display: block;
+      width: 32px; height: 1px;
+      background: currentColor;
+      transition: width .3s;
+    }
+    .btn-ghost:hover { color: var(--gold); }
+    .btn-ghost:hover::after { width: 48px; }
+
+    .hero-right {
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-img-wrap {
+      position: absolute; inset: 0;
+      opacity: 0;
+      animation: fadeIn 1.2s .3s forwards;
+    }
+    /* Decorative perfume bottle SVG placeholder */
+    .hero-visual {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(160deg, #E8DDD0 0%, #C9B99A 60%, #B49A6A 100%);
+      position: relative;
+    }
+    .bottle-svg {
+      width: 260px;
+      filter: drop-shadow(0 40px 60px rgba(26,20,16,.25));
+      animation: floatBottle 6s ease-in-out infinite;
+    }
+    .hero-number {
+      position: absolute; bottom: 3rem; right: 3rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 8rem;
+      font-weight: 300;
+      color: rgba(255,255,255,.15);
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    /* MARQUEE */
+    .marquee-wrap {
+      overflow: hidden;
+      background: var(--deep);
+      padding: 1.2rem 0;
+    }
+    .marquee-inner {
+      display: flex;
+      gap: 4rem;
+      animation: marquee 22s linear infinite;
+      white-space: nowrap;
+    }
+    .marquee-inner span {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.1rem;
+      letter-spacing: .1em;
+      color: var(--gold);
+    }
+    .marquee-sep { color: var(--warm) !important; font-style: normal !important; font-size: .6rem !important; }
+
+    /* ABOUT */
+    .about {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      min-height: 90vh;
+    }
+    .about-visual {
+      background: linear-gradient(200deg, #D4C4A8 0%, #A8906B 100%);
+      position: relative;
+      overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .about-texture {
+      position: absolute; inset: 0;
+      background-image: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 40px,
+        rgba(255,255,255,.04) 40px,
+        rgba(255,255,255,.04) 41px
+      );
+    }
+    .about-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18rem;
+      font-weight: 300;
+      color: rgba(255,255,255,.12);
+      line-height: 1;
+      user-select: none;
+    }
+    .about-content {
+      padding: 8rem 5rem;
+      display: flex; flex-direction: column; justify-content: center;
+      background: var(--cream);
+    }
+    .section-label {
+      font-size: .65rem;
+      letter-spacing: .4em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 2.5rem;
+    }
+    .about-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.8rem, 4vw, 4.5rem);
+      font-weight: 300;
+      line-height: 1.15;
+      color: var(--deep);
+      margin-bottom: 2rem;
+    }
+    .about-heading em { font-style: italic; color: var(--warm); }
+    .about-body {
+      font-size: .88rem;
+      line-height: 2;
+      color: var(--smoke);
+      max-width: 400px;
+      margin-bottom: 3rem;
+    }
+    .about-stats {
+      display: flex; gap: 3rem;
+    }
+    .stat-val {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.5rem;
+      font-weight: 300;
+      color: var(--deep);
+    }
+    .stat-label {
+      font-size: .65rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-top: .3rem;
+    }
+
+    /* COLLECTION */
+    .collection {
+      padding: 8rem 4rem;
+      background: var(--deep);
+    }
+    .collection-header {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      margin-bottom: 5rem;
+    }
+    .collection-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3rem, 5vw, 5rem);
+      font-weight: 300;
+      color: var(--cream);
+      line-height: 1.1;
+    }
+    .collection-title em { font-style: italic; color: var(--gold); }
+    .view-all {
+      font-size: .68rem;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-decoration: none;
+      display: flex; align-items: center; gap: .8rem;
+      transition: gap .3s;
+    }
+    .view-all::after { content: '→'; transition: transform .3s; }
+    .view-all:hover { gap: 1.4rem; }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+    .product-card {
+      position: relative;
+      overflow: hidden;
+      cursor: none;
+    }
+    .product-card:nth-child(2) { margin-top: 3rem; }
+    .product-card:nth-child(3) { margin-top: -2rem; }
+    .product-img {
+      aspect-ratio: 3/4;
+      position: relative;
+      overflow: hidden;
+      transition: transform .6s ease;
+    }
+    .product-card:hover .product-img { transform: scale(1.03); }
+    .product-bg {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+    }
+    .product-bg-1 { background: linear-gradient(160deg, #3A2E26 0%, #6B4E37 100%); }
+    .product-bg-2 { background: linear-gradient(160deg, #2A2830 0%, #4A4060 100%); }
+    .product-bg-3 { background: linear-gradient(160deg, #2E2A24 0%, #5A4A30 100%); }
+    .product-bottle {
+      width: 120px;
+      opacity: .9;
+      filter: drop-shadow(0 20px 40px rgba(0,0,0,.5));
+      transition: transform .4s ease;
+    }
+    .product-card:hover .product-bottle { transform: translateY(-8px); }
+    .product-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,.6) 0%, transparent 50%);
+    }
+    .product-info {
+      padding: 1.5rem 0;
+    }
+    .product-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 400;
+      color: var(--cream);
+      letter-spacing: .05em;
+    }
+    .product-type {
+      font-size: .65rem;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-top: .4rem;
+    }
+    .product-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      color: var(--sand);
+      margin-top: .8rem;
+    }
+    .product-tag {
+      position: absolute; top: 1.2rem; right: 1.2rem;
+      background: var(--gold);
+      color: var(--deep);
+      font-size: .58rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      padding: .4rem .8rem;
+    }
+
+    /* PROCESS */
+    .process {
+      padding: 9rem 4rem;
+      background: var(--cream);
+      position: relative;
+      overflow: hidden;
+    }
+    .process::before {
+      content: 'SCENTARA';
+      position: absolute;
+      bottom: -2rem; right: -1rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 12rem;
+      font-weight: 300;
+      color: rgba(180,154,106,.1);
+      letter-spacing: .1em;
+      pointer-events: none;
+    }
+    .process-inner { max-width: 1100px; margin: 0 auto; }
+    .process-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3rem, 5vw, 5rem);
+      font-weight: 300;
+      line-height: 1.1;
+      margin-bottom: 5rem;
+      max-width: 550px;
+    }
+    .process-heading em { font-style: italic; color: var(--gold); }
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4rem;
+    }
+    .step { position: relative; }
+    .step-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 5rem;
+      font-weight: 300;
+      color: var(--sand);
+      line-height: 1;
+      margin-bottom: 1.5rem;
+    }
+    .step-title {
+      font-size: .8rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--deep);
+      margin-bottom: 1rem;
+    }
+    .step-body {
+      font-size: .85rem;
+      line-height: 1.9;
+      color: var(--smoke);
+    }
+    .step::before {
+      content: '';
+      display: block;
+      width: 40px; height: 1px;
+      background: var(--gold);
+      margin-bottom: 2rem;
+    }
+
+    /* TESTIMONIAL */
+    .testimonial {
+      background: var(--gold);
+      padding: 7rem 4rem;
+      text-align: center;
+    }
+    .testimonial-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 300;
+      font-style: italic;
+      color: var(--deep);
+      max-width: 800px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.4;
+    }
+    .testimonial-author {
+      font-size: .7rem;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: var(--deep);
+      opacity: .7;
+    }
+
+    /* NEWSLETTER */
+    .newsletter {
+      background: var(--deep);
+      padding: 7rem 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 4rem;
+    }
+    .nl-left { flex: 1; }
+    .nl-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.5rem, 4vw, 3.8rem);
+      font-weight: 300;
+      color: var(--cream);
+      line-height: 1.2;
+    }
+    .nl-heading em { font-style: italic; color: var(--gold); }
+    .nl-sub {
+      font-size: .82rem;
+      color: var(--smoke);
+      margin-top: 1rem;
+      letter-spacing: .04em;
+      line-height: 1.7;
+    }
+    .nl-right { flex: 1; }
+    .nl-form {
+      display: flex;
+      border-bottom: 1px solid var(--warm);
+    }
+    .nl-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      padding: 1.2rem 0;
+      font-family: 'Tenor Sans', sans-serif;
+      font-size: .82rem;
+      letter-spacing: .08em;
+      color: var(--cream);
+    }
+    .nl-input::placeholder { color: var(--smoke); }
+    .nl-btn {
+      background: none;
+      border: none;
+      color: var(--gold);
+      font-family: 'Tenor Sans', sans-serif;
+      font-size: .68rem;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+      cursor: none;
+      padding: 0 0 0 1.5rem;
+      transition: color .3s;
+    }
+    .nl-btn:hover { color: var(--cream); }
+
+    /* FOOTER */
+    footer {
+      background: var(--deep);
+      border-top: 1px solid rgba(255,255,255,.07);
+      padding: 4rem;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 4rem;
+    }
+    .footer-brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      font-weight: 300;
+      letter-spacing: .3em;
+      color: var(--cream);
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+    .footer-tagline {
+      font-size: .78rem;
+      line-height: 1.8;
+      color: var(--smoke);
+      max-width: 260px;
+    }
+    .footer-col h4 {
+      font-size: .65rem;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+    }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: .8rem; }
+    .footer-col ul li a {
+      font-size: .8rem;
+      color: var(--smoke);
+      text-decoration: none;
+      transition: color .3s;
+    }
+    .footer-col ul li a:hover { color: var(--cream); }
+    .footer-bottom {
+      background: var(--deep);
+      border-top: 1px solid rgba(255,255,255,.05);
+      padding: 1.5rem 4rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .footer-copy {
+      font-size: .65rem;
+      letter-spacing: .1em;
+      color: var(--smoke);
+    }
+    .social-links { display: flex; gap: 1.5rem; }
+    .social-links a {
+      font-size: .68rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--smoke);
+      text-decoration: none;
+      transition: color .3s;
+    }
+    .social-links a:hover { color: var(--gold); }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes floatBottle {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-18px); }
+    }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* SCROLL REVEAL */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity .8s ease, transform .8s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      nav { padding: 1.5rem 2rem; }
+      .nav-links { gap: 1.5rem; }
+      .hero { grid-template-columns: 1fr; }
+      .hero-right { height: 50vh; }
+      .hero-left { padding: 8rem 2rem 4rem; }
+      .about { grid-template-columns: 1fr; }
+      .about-visual { height: 40vh; }
+      .about-content { padding: 4rem 2rem; }
+      .products-grid { grid-template-columns: 1fr; }
+      .product-card:nth-child(2), .product-card:nth-child(3) { margin-top: 0; }
+      .process-steps { grid-template-columns: 1fr; gap: 3rem; }
+      .newsletter { flex-direction: column; padding: 4rem 2rem; }
+      footer { grid-template-columns: 1fr 1fr; padding: 3rem 2rem; }
+      .collection { padding: 5rem 2rem; }
+      .process { padding: 5rem 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">Scentara</a>
+    <ul class="nav-links">
+      <li><a href="#collection">Collection</a></li>
+      <li><a href="#about">Our Story</a></li>
+      <li><a href="#process">Craft</a></li>
+      <li><a href="#newsletter">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-left">
+      <p class="hero-eyebrow">Maison de Parfum · Est. 2024</p>
+      <h1 class="hero-title">The Art of<br /><em>Invisible</em><br />Luxury</h1>
+      <p class="hero-sub">Scentara distills rare ingredients into memories you carry with you. Each fragrance is a journey — intimate, unexpected, unforgettable.</p>
+      <div class="hero-cta">
+        <a href="#collection" class="btn-primary">Explore Collection</a>
+        <a href="#about" class="btn-ghost">Our Story</a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-img-wrap">
+        <div class="hero-visual">
+          <!-- Decorative Bottle SVG -->
+          <svg class="bottle-svg" viewBox="0 0 200 340" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="75" y="10" width="50" height="18" rx="4" fill="#D4B896" opacity=".8"/>
+            <rect x="82" y="5" width="36" height="10" rx="3" fill="#C4A882" opacity=".9"/>
+            <rect x="87" y="0" width="26" height="8" rx="2" fill="#B49A6A"/>
+            <path d="M55 28 Q50 60 48 90 L48 300 Q48 320 100 320 Q152 320 152 300 L152 90 Q150 60 145 28 Z" fill="url(#bottleGrad)" opacity=".95"/>
+            <path d="M55 28 Q50 60 48 90 L48 180 Q70 200 100 200 Q130 200 152 180 L152 90 Q150 60 145 28 Z" fill="url(#bodyGrad)" opacity=".3"/>
+            <path d="M65 80 Q65 200 65 280 Q65 310 100 310 Q135 310 135 280 L135 80 Z" fill="url(#glassGrad)" opacity=".15"/>
+            <text x="100" y="175" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-family="Cormorant Garamond, serif" font-size="14" letter-spacing="3" font-style="italic">scentara</text>
+            <text x="100" y="195" text-anchor="middle" fill="rgba(255,255,255,0.35)" font-family="Tenor Sans, sans-serif" font-size="7" letter-spacing="4">FINE FRAGRANCE</text>
+            <defs>
+              <linearGradient id="bottleGrad" x1="48" y1="28" x2="152" y2="320" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#E8D5B8"/>
+                <stop offset="50%" stop-color="#C4A07A"/>
+                <stop offset="100%" stop-color="#8B6540"/>
+              </linearGradient>
+              <linearGradient id="bodyGrad" x1="48" y1="28" x2="152" y2="200" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#ffffff"/>
+                <stop offset="100%" stop-color="transparent"/>
+              </linearGradient>
+              <linearGradient id="glassGrad" x1="65" y1="80" x2="135" y2="310" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#ffffff"/>
+                <stop offset="100%" stop-color="transparent"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <span class="hero-number">01</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-wrap">
+    <div class="marquee-inner">
+      <span>Rare Ingredients</span><span class="marquee-sep">◆</span>
+      <span>Artisan Crafted</span><span class="marquee-sep">◆</span>
+      <span>Timeless Elegance</span><span class="marquee-sep">◆</span>
+      <span>Oud · Rose · Amber · Musk · Vetiver</span><span class="marquee-sep">◆</span>
+      <span>Rare Ingredients</span><span class="marquee-sep">◆</span>
+      <span>Artisan Crafted</span><span class="marquee-sep">◆</span>
+      <span>Timeless Elegance</span><span class="marquee-sep">◆</span>
+      <span>Oud · Rose · Amber · Musk · Vetiver</span><span class="marquee-sep">◆</span>
+      <span>Rare Ingredients</span><span class="marquee-sep">◆</span>
+      <span>Artisan Crafted</span><span class="marquee-sep">◆</span>
+      <span>Timeless Elegance</span><span class="marquee-sep">◆</span>
+      <span>Oud · Rose · Amber · Musk · Vetiver</span><span class="marquee-sep">◆</span>
+    </div>
+  </div>
+
+  <!-- COLLECTION -->
+  <section class="collection" id="collection">
+    <div class="collection-header reveal">
+      <h2 class="collection-title">The <em>Signature</em><br />Collection</h2>
+      <a href="#" class="view-all">View All Fragrances</a>
+    </div>
+    <div class="products-grid">
+      <!-- Card 1 -->
+      <div class="product-card reveal">
+        <div class="product-tag">Bestseller</div>
+        <div class="product-img">
+          <div class="product-bg product-bg-1">
+            <svg viewBox="0 0 200 340" class="product-bottle" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="75" y="10" width="50" height="18" rx="4" fill="#C4906A" opacity=".8"/>
+              <rect x="82" y="5" width="36" height="10" rx="3" fill="#B48060"/>
+              <rect x="87" y="0" width="26" height="8" rx="2" fill="#9A6845"/>
+              <path d="M55 28 Q50 60 48 90 L48 300 Q48 320 100 320 Q152 320 152 300 L152 90 Q150 60 145 28 Z" fill="url(#b1g)" opacity=".95"/>
+              <text x="100" y="185" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-family="Cormorant Garamond, serif" font-size="11" letter-spacing="2" font-style="italic">Amber Nuit</text>
+              <defs>
+                <linearGradient id="b1g" x1="48" y1="28" x2="152" y2="320" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#D4956A"/>
+                  <stop offset="100%" stop-color="#6B3A20"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <div class="product-overlay"></div>
+        </div>
+        <div class="product-info">
+          <h3 class="product-name">Amber Nuit</h3>
+          <p class="product-type">Eau de Parfum · Oriental Woody</p>
+          <p class="product-price">$185 · 50ml</p>
+        </div>
+      </div>
+      <!-- Card 2 -->
+      <div class="product-card reveal">
+        <div class="product-img">
+          <div class="product-bg product-bg-2">
+            <svg viewBox="0 0 180 360" class="product-bottle" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="65" y="10" width="50" height="18" rx="2" fill="#8A80B0" opacity=".8"/>
+              <rect x="72" y="3" width="36" height="10" rx="2" fill="#7A70A0"/>
+              <rect x="77" y="-2" width="26" height="8" rx="2" fill="#6A5A90"/>
+              <path d="M45 28 Q42 55 40 85 L40 310 Q40 332 90 332 Q140 332 140 310 L140 85 Q138 55 135 28 Z" fill="url(#b2g)" opacity=".95"/>
+              <text x="90" y="195" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-family="Cormorant Garamond, serif" font-size="10" letter-spacing="2" font-style="italic">Iris Noir</text>
+              <defs>
+                <linearGradient id="b2g" x1="40" y1="28" x2="140" y2="332" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#8A78C8"/>
+                  <stop offset="100%" stop-color="#2A2040"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <div class="product-overlay"></div>
+        </div>
+        <div class="product-info">
+          <h3 class="product-name">Iris Noir</h3>
+          <p class="product-type">Eau de Parfum · Floral Dark</p>
+          <p class="product-price">$210 · 50ml</p>
+        </div>
+      </div>
+      <!-- Card 3 -->
+      <div class="product-card reveal">
+        <div class="product-img">
+          <div class="product-bg product-bg-3">
+            <svg viewBox="0 0 200 340" class="product-bottle" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="80" y="10" width="40" height="18" rx="8" fill="#B0A070" opacity=".8"/>
+              <rect x="85" y="4" width="30" height="10" rx="5" fill="#A09060"/>
+              <rect x="88" y="0" width="24" height="8" rx="4" fill="#907840"/>
+              <ellipse cx="100" cy="190" rx="52" ry="120" fill="url(#b3g)" opacity=".95"/>
+              <text x="100" y="195" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-family="Cormorant Garamond, serif" font-size="10" letter-spacing="2" font-style="italic">Oud Royale</text>
+              <defs>
+                <linearGradient id="b3g" x1="48" y1="70" x2="152" y2="310" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#C8B06A"/>
+                  <stop offset="100%" stop-color="#3A2A10"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <div class="product-overlay"></div>
+        </div>
+        <div class="product-info">
+          <h3 class="product-name">Oud Royale</h3>
+          <p class="product-type">Extrait de Parfum · Resinous</p>
+          <p class="product-price">$295 · 50ml</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="about-visual">
+      <div class="about-texture"></div>
+      <div class="about-num">S</div>
+    </div>
+    <div class="about-content">
+      <p class="section-label reveal">Our Philosophy</p>
+      <h2 class="about-heading reveal">Scent is the<br /><em>Language</em><br />of Memory</h2>
+      <p class="about-body reveal">Born from a passion for olfactory excellence, Scentara sources only the most precious raw materials — aged oud from Southeast Asia, Grasse rose absolutes, and hand-harvested ambergris — to craft fragrances that transcend trends.</p>
+      <div class="about-stats reveal">
+        <div>
+          <div class="stat-val">28+</div>
+          <div class="stat-label">Rare Ingredients</div>
+        </div>
+        <div>
+          <div class="stat-val">12</div>
+          <div class="stat-label">Signature Scents</div>
+        </div>
+        <div>
+          <div class="stat-val">4</div>
+          <div class="stat-label">Years of Craft</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section class="process" id="process">
+    <div class="process-inner">
+      <h2 class="process-heading reveal">The <em>Invisible</em><br />Architecture of Scent</h2>
+      <div class="process-steps">
+        <div class="step reveal">
+          <div class="step-num">01</div>
+          <h3 class="step-title">Sourcing</h3>
+          <p class="step-body">We travel to the origin of each ingredient — the oud forests of Laos, the rose fields of Isparta, the frankincense groves of Oman — to select only the finest materials.</p>
+        </div>
+        <div class="step reveal">
+          <div class="step-num">02</div>
+          <h3 class="step-title">Composition</h3>
+          <p class="step-body">Our master perfumer blends each accord by hand, layering top, heart, and base notes with obsessive precision. Each formula undergoes months of refinement before it is approved.</p>
+        </div>
+        <div class="step reveal">
+          <div class="step-num">03</div>
+          <h3 class="step-title">Maturation</h3>
+          <p class="step-body">Every Scentara fragrance rests for a minimum of six months in glass vats. Time is our most important ingredient — it softens, deepens, and unifies the accord into something transcendent.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIAL -->
+  <div class="testimonial">
+    <p class="testimonial-quote">"Wearing Scentara is like wearing a secret. Intimate, powerful, and utterly unlike anything else."</p>
+    <p class="testimonial-author">— Nour Al-Rashid, Vogue Arabia</p>
+  </div>
+
+  <!-- NEWSLETTER -->
+  <section class="newsletter" id="newsletter">
+    <div class="nl-left">
+      <h2 class="nl-heading">Enter the<br /><em>Inner Circle</em></h2>
+      <p class="nl-sub">First access to new releases, exclusive events,<br />and intimate stories from our atelier.</p>
+    </div>
+    <div class="nl-right">
+      <div class="nl-form">
+        <input type="email" class="nl-input" placeholder="Your email address" />
+        <button class="nl-btn">Subscribe →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div>
+      <div class="footer-brand">Scentara</div>
+      <p class="footer-tagline">Maison de Parfum — crafting rare, intimate fragrances for those who seek the extraordinary.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Collections</h4>
+      <ul>
+        <li><a href="#">Signature</a></li>
+        <li><a href="#">Limited Edition</a></li>
+        <li><a href="#">Discovery Sets</a></li>
+        <li><a href="#">Gift Wrapping</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Maison</h4>
+      <ul>
+        <li><a href="#">Our Story</a></li>
+        <li><a href="#">The Craft</a></li>
+        <li><a href="#">Ingredients</a></li>
+        <li><a href="#">Press</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Service</h4>
+      <ul>
+        <li><a href="#">Shipping</a></li>
+        <li><a href="#">Returns</a></li>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </footer>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2024 Scentara. All rights reserved.</span>
+    <div class="social-links">
+      <a href="#">Instagram</a>
+      <a href="#">TikTok</a>
+      <a href="#">Pinterest</a>
+    </div>
+  </div>
+
+  <script>
+    // Custom cursor
+    const cursor = document.getElementById('cursor');
+    const ring   = document.getElementById('cursorRing');
+    let rx = 0, ry = 0;
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top  = e.clientY + 'px';
+      rx += (e.clientX - rx) * .12;
+      ry += (e.clientY - ry) * .12;
+      ring.style.left = rx + 'px';
+      ring.style.top  = ry + 'px';
+    });
+    function animateRing() {
+      ring.style.left = rx + 'px';
+      ring.style.top  = ry + 'px';
+      requestAnimationFrame(animateRing);
+    }
+    animateRing();
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => observer.observe(el));
+
+    // Stagger reveal children
+    document.querySelectorAll('.products-grid .product-card').forEach((el, i) => {
+      el.style.transitionDelay = (i * .15) + 's';
+    });
+    document.querySelectorAll('.process-steps .step').forEach((el, i) => {
+      el.style.transitionDelay = (i * .15) + 's';
+    });
+  </script>
+</body>
+</html>
